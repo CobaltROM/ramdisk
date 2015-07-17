@@ -31,7 +31,7 @@ debug.                  u:object_r:debug_prop:s0
 debug.db.               u:object_r:debuggerd_prop:s0
 log.                    u:object_r:shell_prop:s0
 service.adb.root        u:object_r:shell_prop:s0
-service.adb.tcp.port    u:object_r:shell_prop:s0
+service.adb.tcp.port*   u:object_r:shell_prop:s0
 
 persist.audio.          u:object_r:audio_prop:s0
 persist.logd.           u:object_r:logd_prop:s0
@@ -50,6 +50,10 @@ selinux.                u:object_r:security_prop:s0
 vold.                   u:object_r:vold_prop:s0
 crypto.                 u:object_r:vold_prop:s0
 
+# ro.build.fingerprint is either set in /system/build.prop, or is
+# set at runtime by system_server.
+build.fingerprint       u:object_r:fingerprint_prop:s0
+
 # ctl properties
 ctl.bootanim            u:object_r:ctl_bootanim_prop:s0
 ctl.dumpstate           u:object_r:ctl_dumpstate_prop:s0
@@ -66,23 +70,13 @@ nfc.                    u:object_r:nfc_prop:s0
 wc_transport.              u:object_r:bluetooth_prop:s0
 usb_uicc.                  u:object_r:uicc_prop:s0
 sys.ims.                   u:object_r:qcom_ims_prop:s0
-dolby.audio.               u:object_r:audio_prop:s0
-sys.usf.                   u:object_r:usf_prop:s0
+#line 1 "device/htc/s4-common/sepolicy/property_contexts"
+oc.cpu_ctrl                     u:object_r:powerctl_prop:s0
 
-htc.camera.                u:object_r:mm-qcamera_prop:s0
-ro.htc.htcmode.socket.type  u:object_r:htcmode_prop:s0
-htc.htcmode.socket.type     u:object_r:htcmode_prop:s0
-htc.htcmode.state           u:object_r:htcmode_prop:s0
-
-# property for htc audio
-htc.audio.            u:object_r:htc_audio_prop:s0
-persist.htc.audio.    u:object_r:htc_audio_prop:s0
-
-# property for htcphone
-net.gannet0.                u:object_r:htcphone_prop:s0
-
-#line 1 "device/qcom/sepolicy/msm8960/property_contexts"
-#### Add by HTC RIL+ ####
-# For efsks usage
-efsks.pid                  u:object_r:efsks_prop:s0
-#### Add by HTC RIL- ####
+debug.through_focus.trigger     u:object_r:camera_prop:s0
+persist.camera                  u:object_r:camera_prop:s0
+#line 1 "vendor/broken/sepolicy/property_contexts"
+service.adb.tcp.port          u:object_r:adbtcp_prop:s0
+recovery.perf.mode            u:object_r:recovery_prop:s0
+adb.secure                    u:object_r:recovery_prop:s0
+cm.userinit.active            u:object_r:userinit_prop:s0

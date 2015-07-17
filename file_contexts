@@ -184,6 +184,7 @@
 /data/resource-cache(/.*)? u:object_r:resourcecache_data_file:s0
 /data/dalvik-cache(/.*)? u:object_r:dalvikcache_data_file:s0
 /data/dalvik-cache/profiles(/.*)? u:object_r:dalvikcache_profiles_data_file:s0
+/data/adb(/.*)?		u:object_r:adb_data_file:s0
 /data/anr(/.*)?		u:object_r:anr_data_file:s0
 /data/app(/.*)?                       u:object_r:apk_data_file:s0
 /data/app/vmdl.*\.tmp(/.*)?           u:object_r:apk_tmp_file:s0
@@ -219,6 +220,9 @@
 /data/misc/wifi/hostapd(/.*)?   u:object_r:wpa_socket:s0
 /data/misc/zoneinfo(/.*)?       u:object_r:zoneinfo_data_file:s0
 
+# coredump directory for userdebug/eng devices
+/cores(/.*)?                    u:object_r:coredump_file:s0
+
 # Wallpaper file for other users
 /data/system/users/[0-9]+/wallpaper		u:object_r:wallpaper_file:s0
 #############################
@@ -249,46 +253,17 @@
 /mnt/asec/[^/]+/[^/]+\.zip  u:object_r:asec_public_file:s0
 /mnt/asec/[^/]+/lib(/.*)?   u:object_r:asec_public_file:s0
 /data/app-asec(/.*)?        u:object_r:asec_image_file:s0
-#line 1 "device/qcom/sepolicy/msm8960/t6/file_contexts"
-###################################
-# Dev nodes for T6 series
-#
-#### Add by HTC RIL+ ####
-/dev/block/mmcblk0p22                           u:object_r:mdm_device:s0
-/dev/block/mmcblk0p23                           u:object_r:mdm_device:s0
-/dev/block/mmcblk0p30                           u:object_r:mdm_device:s0
-#### Add by HTC RIL- ####
-
-#### Add for HTC disable camera ####
-/dev/block/mmcblk0p27				u:object_r:mmc_block_device_control:s0
-
-/dev/block/mmcblk0p21                           u:object_r:misc_partition:s0
-#### Add by HTC Dmagent ####
-/dev/block/mmcblk0p28                           u:object_r:local_partition:s0
-
-#### skylink ####
-/dev/block/mmcblk0p31                          u:object_r:mmc_block_device_skylink:s0
 #line 1 "device/qcom/sepolicy/common/file_contexts"
 ###################################
 # Dev nodes
 #
 /dev/adsprpc-smd                                u:object_r:qdsp_device:s0
-/dev/akm.*                                      u:object_r:akmd_device:s0
 /dev/cpu_dma_latency                            u:object_r:device_latency:s0
-/dev/htc_diag                                   u:object_r:diag_device:s0
 /dev/diag                                       u:object_r:diag_device:s0
-/dev/diag_arm9                                  u:object_r:diag_device:s0
-/dev/diag_mdm                                   u:object_r:diag_device:s0
-/dev/diag_qsc                                   u:object_r:diag_device:s0
-/dev/htcdiag                                    u:object_r:diag_device:s0
 /dev/hsicctl.*                                  u:object_r:hsic_device:s0
-/dev/smuxctl.*                                  u:object_r:smux_device:s0
-/dev/mdm1                                       u:object_r:qsc_device:s0
 /dev/kgsl-3d0                                   u:object_r:gpu_device:s0
-/dev/msm_rotator                                u:object_r:gpu_device:s0
 /dev/mhi_pipe_.*                                u:object_r:mhi_device:s0
 /dev/msm_.*                                     u:object_r:audio_device:s0
-/dev/usf1                                       u:object_r:usf_device:s0
 /dev/msm_dsps                                   u:object_r:sensors_device:s0
 /dev/msm_thermal_query                          u:object_r:thermal_device:s0
 /dev/nfc-nci                                    u:object_r:nfc_device:s0
@@ -296,27 +271,11 @@
 /dev/radio0                                     u:object_r:fm_radio_device:s0
 /dev/rtc0                                       u:object_r:rtc_device:s0
 /dev/sensors                                    u:object_r:sensors_device:s0
-/dev/lightsensor                                u:object_r:sensors_device:s0
-/dev/cm3602                                     u:object_r:sensors_device:s0
 /dev/smd.*                                      u:object_r:smd_device:s0
 /dev/smem_log                                   u:object_r:smem_log_device:s0
-/dev/cwmcu                                      u:object_r:cwmcu_device:s0
-/dev/timerirq                                   u:object_r:invensense_device:s0
 /dev/ttyHSL0                                    u:object_r:console_device:s0
-/dev/ttyHSL1                                    u:object_r:hs_device:s0
-/dev/ttyHSL2                                    u:object_r:cir_device:s0
-/dev/ttyHSL3                                    u:object_r:hs_device:s0
 /dev/ttyHS[0-9]*                                u:object_r:serial_device:s0
-/dev/ttyHSUSB[1-3]                              u:object_r:autobot_device:s0
-/dev/ttyHSUSB4                                  u:object_r:acm_device:s0
 /dev/ttyGS0                                     u:object_r:gadget_serial_device:s0
-# HTC++
-#HTC_FP_START
-/dev/vfsspi                                     u:object_r:vcsFPService_device:s0
-/dev/validity/*                                 u:object_r:vcsFPService_device:s0
-/dev/htc_fingerprint                            u:object_r:vcsFPService_device:s0
-#HTC_FP_END
-/dev/btlock                                     u:object_r:btlock_device:s0
 /dev/usb_ext_chg                                u:object_r:hvdcp_device:s0
 /dev/media([0-9])+                              u:object_r:camera_device:s0
 /dev/jpeg[0-9]*                                 u:object_r:camera_device:s0
@@ -329,6 +288,7 @@
 /dev/block/bootdevice/by-name/fsc               u:object_r:modem_efs_partition_device:s0
 /dev/block/bootdevice/by-name/ssd               u:object_r:ssd_device:s0
 /dev/block/mmcblk0rpmb                          u:object_r:rpmb_device:s0
+/dev/sg.*                                       u:object_r:sg_device:s0
 /dev/ccid_bridge                                u:object_r:usb_uicc_device:s0
 /dev/block/bootdevice/by-name/mdm1m9kefs1       u:object_r:efs_boot_dev:s0
 /dev/block/bootdevice/by-name/mdm1m9kefs2       u:object_r:efs_boot_dev:s0
@@ -345,40 +305,20 @@
 /dev/wwan_ioctl                                 u:object_r:ipa_dev:s0
 /dev/ipaNatTable                                u:object_r:ipa_dev:s0
 /dev/block/mmcblk0                              u:object_r:mmc_block_device:s0
-/dev/htc_sdservice                              u:object_r:vold_device:s0
 /dev/rmnet_ctrl.*                               u:object_r:rmnet_device:s0
 /dev/dpl_ctrl                                   u:object_r:rmnet_device:s0
 /dev/wcnss_ctrl                                 u:object_r:wcnss_device:s0
 /dev/wcnss_wlan                                 u:object_r:wcnss_device:s0
-/dev/voice_svc                                  u:object_r:voice_device:s0
-/dev/system_health_monitor                      u:object_r:system_health_monitor_device:s0
-/dev/rawchip0                                   u:object_r:mm-qcamerad_device:s0
-/dev/gemini0                                    u:object_r:mm-qcamerad_device:s0
-#HTC+
-/dev/htc_nsd_misc                               u:object_r:audiod_device:s0
-/dev/htc_hsicctl                                u:object_r:audiod_device:s0
-/dev/htc-acoustic                               u:object_r:audiod_device:s0
-/dev/rt5501                                     u:object_r:audiod_device:s0
-/dev/tfa9887                                    u:object_r:audiod_device:s0
-/dev/tfa9887l                                   u:object_r:audiod_device:s0
-/dev/tfa9895                                    u:object_r:audiod_device:s0
-/dev/tfa9895l                                   u:object_r:audiod_device:s0
-/dev/msm_acdb                                   u:object_r:audiod_device:s0
-/dev/pmem.*                                     u:object_r:pmem_device:s0
-#HTC-
-/dev/simlock                                    u:object_r:simlock_device:s0
-
-#HTC sensor_hub+
-/dev/shub_dload                                 u:object_r:sensor_hub_device:s0
-/dev/shub_log                                   u:object_r:sensor_hub_device:s0
-/dev/shub_fw_fla                                u:object_r:sensor_hub_device:s0
-/dev/shub_event                                 u:object_r:sensor_hub_device:s0
-#HTC sensor_hub-
-
-# local partition
-/dev/block/bootdevice/by-name/local             u:object_r:local_partition:s0
+/dev/pta                                        u:object_r:pta_device:s0
 /dev/hbtp_input                                 u:object_r:hbtp_device:s0
 /dev/jdi-bu21150                                u:object_r:bu21150_device:s0
+/dev/voice_svc                                  u:object_r:voice_device:s0
+/dev/coresight-stm                              u:object_r:qdss_device:s0
+/dev/coresight-tmc-etf                          u:object_r:qdss_device:s0
+/dev/coresight-tmc-etr                          u:object_r:qdss_device:s0
+/dev/coresight-tmc-etr-stream                   u:object_r:qdss_device:s0
+/dev/system_health_monitor                      u:object_r:system_health_monitor_device:s0
+/dev/block/bootdevice/by-name/frp               u:object_r:frp_block_device:s0
 
 ###################################
 # Dev socket nodes
@@ -406,25 +346,10 @@
 /dev/socket/rild2-debug                         u:object_r:rild_debug_socket:s0
 /dev/socket/rild3                               u:object_r:rild_socket:s0
 /dev/socket/rild3-debug                         u:object_r:rild_debug_socket:s0
-# HTC-htc_dk-BEGIN: for dumping kernel log from system_server
-/dev/socket/htc_dk                              u:object_r:htc_dk_socket:s0
-# HTC-htc_dk-END
-# HTC-htc_dlk-BEGIN: for dumping last kernel log from system_app
-/dev/socket/htc_dlk                             u:object_r:htc_dlk_socket:s0
-# HTC-htc_dlk-END
 
-#OMADM_DMAGENT_START
-/dev/socket/dmagent  u:object_r:dmagent_socket:s0
-#OMADM_DMAGENT_END
-
-#### Add by HTC SSD Tool START ####
-/dev/socket/hld(/.*)?                           u:object_r:hld_socket:s0
-#### Add by HTC SSD Tool END ####
-/system/bin/cand                                u:object_r:cand_exec:s0
 ###################################
 # System files
 #
-#/system/bin/app_process                         u:object_r:zygote_exec:s0
 /system/bin/ATFWD-daemon                        u:object_r:atfwd_exec:s0
 /system/bin/PktRspTest                          u:object_r:diag_exec:s0
 /system/bin/audiod                              u:object_r:audiod_exec:s0
@@ -439,7 +364,6 @@
 /system/bin/diag_uart_log                       u:object_r:diag_exec:s0
 /system/bin/drmdiagapp                          u:object_r:diag_exec:s0
 /system/bin/irsc_util                           u:object_r:irsc_util_exec:s0
-/system/bin/cir_fw_update                       u:object_r:cir_fw_update_exec:s0
 /system/bin/mm-pp-daemon                        u:object_r:mm-pp-daemon_exec:s0
 /system/bin/mmi                                 u:object_r:mmi_exec:s0
 /system/bin/mpdecision                          u:object_r:mpdecision_exec:s0
@@ -449,17 +373,13 @@
 /system/bin/imsqmidaemon                        u:object_r:ims_exec:s0
 /system/bin/ims_rtp_daemon                      u:object_r:ims_exec:s0
 /system/bin/imscmservice                        u:object_r:imscm_exec:s0
-/system/bin/ip                                  u:object_r:nettools_exec:s0
-/system/bin/iptables                            u:object_r:nettools_exec:s0
-/system/bin/ip6tables                           u:object_r:nettools_exec:s0
-/system/xbin/tcpdump                            u:object_r:nettools_exec:s0
 /system/bin/netmgrd                             u:object_r:netmgrd_exec:s0
 /system/bin/qmuxd                               u:object_r:qmuxd_exec:s0
 /system/bin/port-bridge                         u:object_r:port-bridge_exec:s0
 /system/bin/sensors.qcom                        u:object_r:sensors_exec:s0
+/system/bin/sns.*                               u:object_r:sensors_test_exec:s0
 /system/bin/test_diag                           u:object_r:diag_exec:s0
 /system/bin/thermal-engine                      u:object_r:thermal-engine_exec:s0
-/system/bin/thermald                            u:object_r:thermald_exec:s0
 /system/bin/vm_bms                              u:object_r:vm_bms_exec:s0
 /system/bin/mm-qcamera-daemon                   u:object_r:mm-qcamerad_exec:s0
 /system/rfs.*                                   u:object_r:rfs_system_file:s0
@@ -499,69 +419,25 @@
 /system/bin/garden_app                          u:object_r:location_exec:s0
 /system/bin/gpsone_daemon                       u:object_r:location_exec:s0
 /system/vendor/bin/slim_ap_daemon               u:object_r:location_exec:s0
+/system/bin/energy-awareness                    u:object_r:energyawareness_exec:s0
 /system/vendor/bin/qti                          u:object_r:qti_exec:s0
 /system/bin/wcnss_service                       u:object_r:wcnss_service_exec:s0
-/system/bin/usf_epos                            u:object_r:usf_exec:s0
-/system/bin/usf_gesture                         u:object_r:usf_exec:s0
-/system/bin/usf_hovering                        u:object_r:usf_exec:s0
-/system/bin/usf_p2p                             u:object_r:usf_exec:s0
-/system/bin/usf_proximity                       u:object_r:usf_exec:s0
-/system/bin/usf_sync_gesture                    u:object_r:usf_exec:s0
-/system/bin/usf_sw_calib                        u:object_r:usf_exec:s0
-/system/bin/usf_pairing                         u:object_r:usf_exec:s0
-/system/bin/usf_tester                          u:object_r:usf_exec:s0
-/system/bin/pnpmgr                              u:object_r:pnpmgr_exec:s0
-/system/bin/akmd                                u:object_r:akmd_exec:s0
-/system/bin/tpd_daemon                          u:object_r:tpd_daemon_exec:s0
-#HTC_FP_START
-/system/bin/vcsFPService			u:object_r:vcsFPService_exec:s0
-/system/bin/vcsFirmwareVersion			u:object_r:vcsFPService_exec:s0
-/system/bin/vcsSimpleEnrollMatch		u:object_r:vcsFPService_exec:s0
-#HTC_FP_END
-#HTC_WIFI_START
-/system/xbin/nc     u:object_r:netcat_exec:s0
-#HTC_WIFI_END
-/system/bin/hcheck                       		u:object_r:hcheck_exec:s0
-/system/bin/hcheck-v2                           u:object_r:wv-prov_exec:s0
-/dev/htcdrm                                     u:object_r:htcdrm_device:s0
-/system/bin/read_dap_cert                       u:object_r:read_dap_cert_exec:s0
-/system/bin/htc_ebdlogd                         u:object_r:htc_ebdlogd_exec:s0
-/sbin/htc_ebdlogd_recvy                         u:object_r:htc_ebdlogd_exec:s0
-#OMADM_DMAGENT_START
-/system/bin/dmagent  u:object_r:dmagent_exec:s0
-#OMADM_DMAGENT_END
-/system/bin/shub_dbg                            u:object_r:shub_dbg_exec:s0
-/sbin/sfc                                       u:object_r:sfc_exec:s0
-/system/bin/rild_qsc                            u:object_r:rild_exec:s0
-#### Add by HTC SSD Tool START ####
-/system/bin/hld                                 u:object_r:hld_exec:s0
-#### Add by HTC SSD Tool END ####
-
-###################################
-# proc files
-#
-/proc/driver/hdf                                u:object_r:sfc_block_device:s0
 /system/vendor/bin/hbtp_daemon                  u:object_r:hbtp_exec:s0
-/system/bin/sapd                                u:object_r:sapd_exec:s0
-/system/bin/btsnoop                             u:object_r:btsnoop_exec:s0
-/system/bin/dun-server                          u:object_r:dun-server_exec:s0
 
 ###################################
 # sysfs files
 #
 /sys/class/graphics/fb0/mdp/caps                                    u:object_r:sysfs_graphics:s0
 /sys/class/thermal(/.*)?                                            u:object_r:sysfs_thermal:s0
-/sys/devices/.*bcl.*(/.*)?                                          u:object_r:sysfs_thermal:s0
+/sys/devices/soc.0/qcom,bcl.*(/.*)?                                 u:object_r:sysfs_thermal:s0
+/sys/devices/qcom,bcl.*(/.*)?                                       u:object_r:sysfs_thermal:s0
 /sys/devices/f9200000.*/power_supply/usb(/.*)?                      u:object_r:sysfs_usb_supply:s0
 /sys/devices/msm_dwc3/power_supply/usb(/.*)?                        u:object_r:sysfs_usb_supply:s0
 /sys/devices/msm_otg/power_supply/usb(/.*)?                         u:object_r:sysfs_usb_supply:s0
-/sys/devices/virtual/android_usb/android0/f_projector/.*            u:object_r:sysfs_usb_mirror_link:s0
-/sys/devices/virtual/android_usb/android0/f_projector2/.*           u:object_r:sysfs_usb_mirror_link:s0
 /sys/devices/platform/battery_current_limit                         u:object_r:sysfs_thermal:s0
 /sys/devices/qpnp-charger.*/power_supply/battery(/.*)?              u:object_r:sysfs_battery_supply:s0
 /sys/devices/system/cpu/cpu0/rq-stats/*                             u:object_r:sysfs_rqstats:s0
 /sys/devices/virtual/graphics/fb([0-2])+/idle_time                  u:object_r:sysfs_graphics:s0
-/sys/devices/virtual/graphics/fb([0-2])+/dynamic_fps                u:object_r:sysfs_graphics:s0
 /sys/devices/virtual/graphics/fb([0-2])+/product_description        u:object_r:sysfs_graphics:s0
 /sys/devices/virtual/graphics/fb([0-2])+/vendor_name                u:object_r:sysfs_graphics:s0
 /sys/devices/virtual/hsicctl/hsicctl1[0-9]/modem_wait               u:object_r:sysfs_hsic_modem_wait:s0
@@ -574,6 +450,8 @@
 /sys/module/msm_thermal/core_control/cpus_offlined                  u:object_r:sysfs_mpdecision:s0
 /sys/devices/f9a55000.*/power_supply/usb(/.*)?                      u:object_r:sysfs_usb_supply:s0
 /sys/devices/virtual/graphics/fb([0-2])+/hpd                        u:object_r:sysfs_graphics:s0
+/sys/devices/virtual/graphics/fb([0-2])+/res_info                   u:object_r:sysfs_graphics:s0
+/sys/devices/virtual/graphics/fb([0-2])+/s3d_mode                   u:object_r:sysfs_graphics:s0
 /sys/class/graphics/fb([0-2])+/mdp/caps                             u:object_r:sysfs_graphics:s0
 /sys/class/graphics/fb([0-2])+/ad                                   u:object_r:sysfs_graphics:s0
 /sys/bus/platform/drivers/xhci_msm_hsic(/.*)?                       u:object_r:sysfs_hsic:s0
@@ -587,11 +465,6 @@
 /sys/bus/msm_subsys/devices/subsys3/restart_level                   u:object_r:sysfs_ssr_toggle:s0
 /sys/bus/msm_subsys/devices/subsys4/restart_level                   u:object_r:sysfs_ssr_toggle:s0
 /sys/devices/soc0/.*                                                u:object_r:sysfs_socinfo:s0
-/sys/devices/virtual/htc_sensorhub/sensor_hub/.*                    u:object_r:sysfs_sensor_hub:s0
-/sys/devices/virtual/ST_acc/acc/.*                                  u:object_r:sysfs_g_sensor:s0
-/sys/devices/virtual/htc_g_sensor/g_sensor/.*                       u:object_r:sysfs_g_sensor:s0
-/sys/devices/soc.*/78b6000.i2c/i2c-0/0-000e/iio.*/.*                u:object_r:sysfs_g_sensor:s0
-/sys/devices/virtual/ST_gyr/gyr/.*                                  u:object_r:sysfs_gyro:s0
 
 ###################################
 # data files
@@ -599,13 +472,12 @@
 /data/connectivity(/.*)?                                            u:object_r:cnd_data_file:s0
 /data/data_test(/.*)?                                               u:object_r:data_test_data_file:s0
 /data/diag_log(/.*)?                                                u:object_r:diag_data_file:s0
-/data/misc/modem_config(/.*)?                                       u:object_r:modem_config_file:s0
 /data/misc/sensors(/.*)?                                            u:object_r:sensors_data_file:s0
 /data/rfs.*                                                         u:object_r:rfs_data_file:s0
 /data/hlos_rfs(/.*)?                                                u:object_r:rfs_shared_hlos_file:s0
 /data/camera(/.*)?                                                  u:object_r:camera_socket:s0
 /data/system/sensors(/.*)?                                          u:object_r:sensors_data_file:s0
-/data/time/*                                                        u:object_r:time_data_file:s0
+/data/time(/.*)?                                                    u:object_r:time_data_file:s0
 /data/nfc(/.*)?                                                     u:object_r:nfc_data_file:s0
 /data/system/perfd(/.*)?                                            u:object_r:mpctl_data_file:s0
 /data/misc/perfd(/.*)?                                              u:object_r:mpctl_socket:s0
@@ -615,16 +487,8 @@
 /data/misc/qsee(/.*)?                                               u:object_r:data_qsee_file:s0
 /data/misc/location(/.*)?                                           u:object_r:location_data_file:s0
 /data/FTM_AP(/.*)?                                                  u:object_r:mmi_data_file:s0
-/data/dalvik-cache/arm(/.*)?                                        u:object_r:dalvikcache_device:s0
-/data/usf(/.*)?                                                     u:object_r:usf_data_file:s0
-
-#OMADM_DMAGENT_START
-/data/local/dma.cfg                                                 u:object_r:dmagent_data_file:s0
-#OMADM_DMAGENT_END
-
-# [framework] begin, Jim Guo, 2014/12/17, [DEBUG][HPROF] ART: Collecting debug information on OOME occurred.
-/data/misc/hprof(/.*)?                                              u:object_r:hprof_data_file:s0
-# [framework] end, Jim Guo, 2014/12/17.
+/data/misc/hbtp(/.*)?                                               u:object_r:hbtp_log_file:s0
+/data/misc/qlogd(/.*)?                                              u:object_r:qlogd_data_file:s0
 
 ###################################
 # persist files
@@ -634,7 +498,6 @@
 /persist/data(/.*)?                                                 u:object_r:persist_drm_file:s0
 /persist/data/tz(/.*)?                                              u:object_r:persist_drm_file:s0
 /persist/data/sfs(/.*)?                                             u:object_r:persist_drm_file:s0
-/persist/usf(/.*)?                                                  u:object_r:persist_usf_file:s0
 
 ###################################
 # oem files
@@ -642,71 +505,176 @@
 /oem(/.*)?       u:object_r:system_file:s0
 
 ###################################
-# OMADM_SPCS carrier files
+# etc files
 #
-/carrier(/.*)?       u:object_r:carrier_file:s0
+/etc/firmware/hbtp/*                                                u:object_r:hbtp_cfg_file:s0
+#line 1 "device/qcom/sepolicy/test/file_contexts"
+/system/bin/kernel-tests/smd.* u:object_r:smd_test_exec:s0
+/system/bin/qmi-framework-tests/qmi_ping.*      u:object_r:qmi_ping_exec:s0
+/system/bin/qmi-framework-tests/qmi_test.*      u:object_r:qmi_test_service_exec:s0
 
-###################################
-# app preload files
-#
-/preload(/.*)?       u:object_r:system_data_file:s0
+/system/bin/diag_dci_client      u:object_r:diagdciclient_exec:s0
 
-###################################
-# ADW serial port
-#
-/sys/devices/virtual/android_usb/android0/f_serial/on				u:object_r:sysfs_usb_adw:s0
+/system/bin/ptt_socket_app                      u:object_r:wcnss_service_exec:s0
+/system/bin/athdiag                             u:object_r:wcnss_service_exec:s0
+/system/bin/cld-fwlog-netlink                   u:object_r:wcnss_service_exec:s0
+/system/bin/cld-fwlog-record                    u:object_r:wcnss_service_exec:s0
+/system/bin/cld-fwlog-parser                    u:object_r:wcnss_service_exec:s0
+/system/bin/cnss_diag                           u:object_r:wcnss_service_exec:s0
+/system/bin/iwpriv                              u:object_r:wcnss_service_exec:s0
+/system/bin/iwconfig                            u:object_r:wcnss_service_exec:s0
+/system/bin/iw                                  u:object_r:wcnss_service_exec:s0
+/system/bin/iwlist                              u:object_r:wcnss_service_exec:s0
+/system/bin/iwss_test                           u:object_r:wcnss_service_exec:s0
+/system/bin/pktlogconf                          u:object_r:wcnss_service_exec:s0
+/system/bin/iperf                               u:object_r:wcnss_service_exec:s0
+/system/bin/mboxping                            u:object_r:wcnss_service_exec:s0
+/system/bin/sigma_dut                           u:object_r:wcnss_service_exec:s0
+/system/bin/pktlog                              u:object_r:wcnss_service_exec:s0
+/system/bin/hal_proxy_daemon                    u:object_r:wcnss_service_exec:s0
+/system/bin/Wifilogger_app                      u:object_r:wcnss_service_exec:s0
+/system/bin/hs20-osu-client                     u:object_r:wcnss_service_exec:s0
+/system/bin/ndc                                 u:object_r:wcnss_service_exec:s0
+/system/bin/playreadygtest(.*)                  u:object_r:sectest_exec:s0
+/system/bin/oem(.*)test                         u:object_r:sectest_exec:s0
+/system/bin/widevine(.*)                        u:object_r:sectest_exec:s0
+/system/bin/qseecom_sample_client               u:object_r:sectest_exec:s0
+/system/bin/isdbtmmtest                         u:object_r:sectest_exec:s0
+/system/bin/secure_ui_sample_client             u:object_r:sectest_exec:s0
+/system/bin/qseecom_security_test               u:object_r:sectest_exec:s0
+/system/bin/qfipsverify                         u:object_r:sectest_exec:s0
+/system/bin/qseecom_assurance_test              u:object_r:sectest_exec:s0
+/system/bin/drm_generic_prov_test               u:object_r:sectest_exec:s0
+/system/bin/ParserApp                           u:object_r:sectest_exec:s0
+/system/bin/StoreKeybox                         u:object_r:sectest_exec:s0
+/system/bin/InstallKeybox                       u:object_r:sectest_exec:s0
 
-###################################
-# Embedded log files
-#
-/devlog(/.*)?                                                       u:object_r:htc_ebdlogd_file:s0
-/fataldevlog(/.*)?                                                  u:object_r:htc_ebdlogd_file:s0
+#Context for location features
+/system/bin/sdp_test                            u:object_r:location_exec:s0
+/system/bin/icm_test                            u:object_r:location_exec:s0
+/system/bin/pf_test_app                         u:object_r:location_exec:s0
+/system/bin/quipc_ipe_test                      u:object_r:location_exec:s0
+/system/bin/ipead_test                          u:object_r:location_exec:s0
+/system/bin/quipc_iwmm_test                     u:object_r:location_exec:s0
+/system/bin/slimcw_test                         u:object_r:location_exec:s0
+/system/bin/lowi_test                           u:object_r:location_exec:s0
+/system/bin/test-lowi-client                    u:object_r:location_exec:s0
+/system/bin/quipc_os_api_test_1                 u:object_r:location_exec:s0
+/system/bin/quipc_os_api_test_2                 u:object_r:location_exec:s0
+/system/bin/loc_api_v02_utt                     u:object_r:location_exec:s0
+/system/bin/test-version                        u:object_r:location_exec:s0
+/system/bin/test-pos-tx                         u:object_r:location_exec:s0
+/system/bin/xtwifi-upload-test                  u:object_r:location_exec:s0
+/system/bin/test-fake-ap                        u:object_r:location_exec:s0
+/system/bin/loc_api_app                         u:object_r:location_exec:s0
+/system/bin/test_loc_api_client                 u:object_r:location_exec:s0
 
-###################################
-# vzw quality logger files
-#
-/vzw/quality(/.*)?                                                  u:object_r:vzw_quality_file:s0
-/vzwqualitylogger(/.*)?                                             u:object_r:vzwqualitylogger_file:s0
-
-###################################
-# PDN files
-#
-/carrier/PDN(/.*)?       u:object_r:pdn_file:s0
-
-###################################
-# cota files
-#
-/cota(/.*)?       u:object_r:system_data_file:s0
-
-###################################
-# nfc_record files
-#
-/nfc_record(/.*)?       u:object_r:system_data_file:s0
-
-
-# Absolute persisted directory
-/persdata/absolute(/.*)?                                            u:object_r:abt_pers_data_file:s0
+#Context for mediaserver
+/data/display-tests/media(/.*)?                 u:object_r:display_test_media_file:s0
 #line 1 "device/qcom/sepolicy/msm8960/file_contexts"
 ###################################
 # Dev nodes
 #
-#### Add by HTC RIL+ ####
-/dev/mdm                                        u:object_r:ksbridgehsic_device:s0
-/dev/ttyUSB[0-1]                                u:object_r:ksbridgehsic_device:s0
-/data/qcks                                      u:object_r:mdm_device:s0
-/data/qcks/.*                                   u:object_r:mdm_device:s0
-/data/efs                                       u:object_r:mdm_device:s0
-/data/efs/.*                                    u:object_r:mdm_device:s0
-/dev/block/mmcblk0p17                           u:object_r:mdm_device:s0
-#### Add by HTC RIL- ####
+/dev/msm_camera(/.*)?                           u:object_r:camera_device:s0
+/dev/msm_rotator                                u:object_r:graphics_device:s0
+/dev/mdm                                        u:object_r:mdm_device:s0
+/dev/block/bootdevice/by-name/m9kefs1           u:object_r:efs_boot_dev:s0
+/dev/block/bootdevice/by-name/m9kefs2           u:object_r:efs_boot_dev:s0
+/dev/block/bootdevice/by-name/m9kefs3           u:object_r:efs_boot_dev:s0
+/dev/block/bootdevice/by-name/m9kefsc           u:object_r:efs_boot_dev:s0
 
 ###################################
 # System files
 #
-#### Add by HTC RIL+ ####
+/system/bin/thermald                            u:object_r:thermal-engine_exec:s0
 /system/bin/qcks                                u:object_r:mdm_helper_exec:s0
-/system/bin/efsks                               u:object_r:mdm_helper_exec:s0
-/system/bin/qmiproxy                            u:object_r:qmiproxy_exec:s0
-#### Add by HTC RIL- ####
+/system/bin/efks                                u:object_r:mdm_helper_exec:s0
 
+###################################
+# Data files
+#
+/data/qcks(/.*)?                                u:object_r:efs_data_file:s0
 
+###################################
+# SDIO transport control on Fusion
+#
+/sys/class/android_usb/f_rmnet_smd_sdio/transport  --  u:object_r:sysfs_rmnet:s0
+/sys/devices/virtual/android_usb/android0/f_rmnet_smd_sdio/transport  --  u:object_r:sysfs_rmnet:s0
+#line 1 "device/htc/s4-common/sepolicy/file_contexts"
+
+# Bluetooth
+/dev/rfkill                                     u:object_r:rfkill_device:s0
+
+# Camera
+/data/cam_socket.*                              u:object_r:camera_socket:s0
+/dev/gemini.*                                   u:object_r:camera_device:s0
+/dev/rawchip.*                                  u:object_r:camera_device:s0
+/sys/camera_htccallback/htccallback             u:object_r:camera_sysfs:s0
+
+# CMHW
+/sys/devices/virtual/timed_output/vibrator/voltage_level    u:object_r:vibeamp_sysfs:s0
+
+# Graphics
+/dev/kgsl-2d.*                                  u:object_r:gpu_device:s0
+
+# Lights
+/sys/devices/i2c-12/12-0033/leds/flashlight/function_switch             u:object_r:lights_sysfs:s0
+/sys/devices/platform/msm_fb.591105/leds/lcd-backlight/max_brightness   u:object_r:lights_sysfs:s0
+
+# Modem
+/dev/block/mmcblk0p20                           u:object_r:modem_efs_partition_device:s0
+/dev/block/mmcblk0p22                           u:object_r:modem_efs_partition_device:s0
+/dev/block/mmcblk0p24                           u:object_r:modem_efs_partition_device:s0
+/dev/block/mmcblk0p25                           u:object_r:modem_efs_partition_device:s0
+
+# Mpdecision
+/data/system/default_values                     u:object_r:mpctl_data_file:s0
+/dev/socket/mpctl                               u:object_r:mpctl_socket:s0
+
+# Sensors
+/data/misc/AK8975Prms.ini                       u:object_r:sensors_data_file:s0
+/data/misc/AccPrmsF.ini                         u:object_r:sensors_data_file:s0
+/dev/akm8975.*                                  u:object_r:sensors_device:s0
+/dev/bma150                                     u:object_r:sensors_device:s0
+/dev/cm3602                                     u:object_r:sensors_device:s0
+/dev/ewtzmu2.*                                  u:object_r:sensors_device:s0
+/dev/lightsensor                                u:object_r:sensors_device:s0
+/system/bin/akmd                                u:object_r:akmd_exec:s0
+/system/bin/ewtzmud                             u:object_r:ewtzmud_exec:s0
+
+# Timer
+/dev/timerirq                                   u:object_r:timerirq_device:s0
+#line 1 "vendor/broken/sepolicy/file_contexts"
+/cache/dalvik-cache(/.*)? u:object_r:dalvikcache_data_file:s0
+
+/cache/recovery(/.*)?     u:object_r:recovery_cache_file:s0
+
+# Auditd is a logging daemon. Put it into logd's context
+/system/bin/auditd        u:object_r:logd_exec:s0
+/data/misc/audit(/.*)?    u:object_r:auditd_log:s0
+
+/system/bin/sysinit       u:object_r:sysinit_exec:s0
+
+/system/etc/init.d/90userinit           u:object_r:userinit_exec:s0
+/data/local/userinit.sh                 u:object_r:userinit_data_exec:s0
+
+# For minivold in recovery
+/sbin/minivold            u:object_r:vold_exec:s0
+
+#############################
+# performance-related sysfs files (CM)
+/sys/devices/system/cpu.*/cpufreq(/.*)? --  u:object_r:sysfs_devices_system_cpu:s0
+/sys/block/mmcblk.*/queue/scheduler  --    u:object_r:sysfs_devices_system_iosched:s0
+
+/data/hostapd(/.*)?         u:object_r:wifi_data_file:s0
+/data/misc/radio(/.*)?      u:object_r:radio_data_file:s0
+
+#############
+# Superuser's control sockets
+/dev/socket/su-daemon(/.*)?   u:object_r:superuser_device:s0
+
+# Expansion of these hooks is a bit unconventional
+/cache/com.cyanogenmod.keyhandler.dex   u:object_r:dalvikcache_data_file:s0
+
+# Lockscreen wallpaper
+/data/system/users/[0-9]+/keyguard_wallpaper   u:object_r:wallpaper_file:s0
