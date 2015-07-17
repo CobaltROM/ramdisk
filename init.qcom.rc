@@ -15,10 +15,10 @@ on fs
     mkdir /firmware_q6 0771 system system
 
     # mount all mmc partitions
-    mount_all /fstab.qcom
+    mount_all /fstab.ville
 
     # Enable zRAM
-    swapon_all /fstab.qcom
+    swapon_all /fstab.ville
 
     mkdir /data/tombstones 0771 system system
     symlink /data/tombstones /tombstones
